@@ -1,0 +1,33 @@
+:root {
+	font-family: 'Questrial', Inter, system-ui, Avenir, Helvetica, Arial,
+		sans-serif;
+	line-height: 1.5;
+	font-weight: 400;
+
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+
+	@apply text-primary-dark;
+	@apply dark:text-primary-light;
+}
+
+h1,
+h2 {
+	line-height: 1.1;
+	font-weight: 400;
+}
+
+h2,
+button > p {
+	font-family: 'Lato', Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+h1 {
+	font-size: 3.2em;
+}
+
+h2 {
+	font-size: 2em;
+}
