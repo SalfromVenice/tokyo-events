@@ -7,7 +7,7 @@ import {
 	Map,
 	Slider,
 	TabSelector,
-} from './componets';
+} from './components';
 import type { ApiStatusT, JventT } from './types';
 import { getMyPosition } from './helpers/geolocalization-helper';
 
@@ -34,11 +34,11 @@ function App() {
 		setApiStatus('PENDING');
 		try {
 			const response = await axios.get(
-				`http://127.0.0.1:3000/api/v1/events?lat=${lat}&lng=${lng}&radius=${distance}`
+				`http://127.0.0.1:3000/api/v1/events?lat=${lat}&lng=${lng}&radius=${distance}`,
 			);
 			const { data } = response;
 			const freeEv = data.filter(
-				(jev: JventT) => jev.cost === 'FreeEntry'
+				(jev: JventT) => jev.cost === 'FreeEntry',
 			);
 			setEvents({
 				all: data,
@@ -50,8 +50,6 @@ function App() {
 			setApiStatus('ERROR');
 		}
 	}
-
-	if (apiStatus === 'PENDING') return <>LOADING...</>;
 
 	if (apiStatus === 'ERROR') return <>NO GOOD</>;
 
@@ -71,18 +69,25 @@ function App() {
 				distance={distance * 1000}
 			/>
 		</>,
-		<>
+		<div className='mt-24'>
 			{eventsVisualized.map((jvent) => (
 				<EventCard key={jvent.id} jvent={jvent} />
 			))}
-		</>,
+		</div>,
 	];
 
 	return (
 		<>
-			<Header eventsFound={eventsVisualized?.length} />
-			<div className='flex justify-between items-center'>
+			<Header
+				eventsFound={
+					apiStatus === 'PENDING' ? 0 : eventsVisualized?.length
+				}
+			/>
+			<div
+				className={`${tab ? 'fixed translate-x-1/2 right-1/2' : 'mx-auto'} w-4xl backdrop-blur-sm flex justify-between items-center border border-accent-dark/15 rounded-xl bg-accent-dark/5 p-4`}
+			>
 				<Button
+					disabled={apiStatus !== 'IDLE' && apiStatus !== 'SUCCESS'}
 					text={onlyFree ? 'Free Entry' : 'All Events'}
 					onClick={toggleFreeEvents}
 					hintText={
@@ -91,13 +96,18 @@ function App() {
 							: 'Click to see events with free entry only'
 					}
 				/>
+				<TabSelector
+					tab={tab}
+					setTab={setTab}
+					disabled={apiStatus !== 'IDLE' && apiStatus !== 'SUCCESS'}
+				/>
 				<Button
+					disabled={apiStatus !== 'IDLE' && apiStatus !== 'SUCCESS'}
 					text='Get my position'
 					onClick={() => getMyPosition(setLocation)}
 					hintText='See events near you'
 				/>
 			</div>
-			<TabSelector tab={tab} setTab={setTab} />
 			{tabs[tab]}
 		</>
 	);

@@ -6,6 +6,7 @@ interface ButtonProps {
 	onClick: () => void;
 	hintText: string;
 	className?: string;
+	disabled?: boolean;
 }
 
 export const Button: React.FC<ButtonProps> = ({
@@ -13,6 +14,7 @@ export const Button: React.FC<ButtonProps> = ({
 	onClick,
 	hintText,
 	className,
+	disabled,
 }) => {
 	const [visible, setVisible] = useState<boolean>(false);
 
@@ -25,13 +27,14 @@ export const Button: React.FC<ButtonProps> = ({
 			onClick={onClick}
 			onMouseEnter={() => setVisible(true)}
 			onMouseLeave={() => setVisible(false)}
+			disabled={disabled}
 		>
 			<Tippy
 				children={hintText}
 				className={
 					!visible
 						? 'hidden'
-						: 'text-primary-dark -translate-x-1/2 left-1/2 bottom-10 min-w-32'
+						: 'text-primary-dark dark:text-accent-dark -translate-x-1/2 left-1/2 bottom-10 min-w-32'
 				}
 			/>
 			{text}
