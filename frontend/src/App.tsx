@@ -69,11 +69,11 @@ function App() {
 				distance={distance * 1000}
 			/>
 		</>,
-		<div className='mt-24'>
+		<>
 			{eventsVisualized.map((jvent) => (
 				<EventCard key={jvent.id} jvent={jvent} />
 			))}
-		</div>,
+		</>,
 	];
 
 	return (
@@ -84,7 +84,7 @@ function App() {
 				}
 			/>
 			<div
-				className={`${tab ? 'fixed translate-x-1/2 right-1/2' : 'mx-auto'} w-4xl backdrop-blur-sm flex justify-between items-center border border-accent-dark/15 rounded-xl bg-accent-dark/5 p-4`}
+				className={`sticky top-0 mx-auto w-4xl backdrop-blur-sm flex justify-between items-center border border-accent-dark/15 rounded-xl bg-accent-dark/5 p-4`}
 			>
 				<Button
 					disabled={apiStatus !== 'IDLE' && apiStatus !== 'SUCCESS'}
