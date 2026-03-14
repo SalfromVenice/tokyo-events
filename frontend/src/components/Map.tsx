@@ -13,23 +13,24 @@ import {
 	useMap,
 } from 'react-leaflet';
 import personIcon from '../assets/icon.svg';
+import mapPinIcon from '../assets/map-pin-dark.svg';
 import type { JventT } from '../types';
 import { isThemeDark } from '../helpers/theme-helper';
 
 interface MapProps {
-	jvents: JventT[];
+	events: JventT[];
 	center: Record<string, number>;
 	setCenter: React.Dispatch<React.SetStateAction<Record<string, number>>>;
 	distance: number;
 }
 
 export const Map: React.FC<MapProps> = ({
-	jvents,
+	events,
 	center,
 	setCenter,
 	distance,
 }) => {
-	const pins = jvents.map((j) => ({
+	const pins = events.map((j) => ({
 		id: j.id,
 		lat: j.latitude,
 		lng: j.longitude,
@@ -44,6 +45,13 @@ export const Map: React.FC<MapProps> = ({
 		popupAnchor: [0, -60], // posizione del popup rispetto all'icona
 	});
 
+	const pinIcon = L.icon({
+		iconUrl: mapPinIcon,
+		iconSize: [30, 30],
+		iconAnchor: [15, 30],
+		popupAnchor: [0, -30],
+	});
+
 	// centro Tokyo
 	const tokyoCenter = { lat: 35.682839, lng: 139.759455 };
 
@@ -52,7 +60,7 @@ export const Map: React.FC<MapProps> = ({
 	const delta = 0.18; // circa 20km in gradi lat/long
 	const bounds = L.latLngBounds(
 		[tokyoCenter.lat - delta, tokyoCenter.lng - delta], // sud-ovest
-		[tokyoCenter.lat + delta, tokyoCenter.lng + delta] // nord-est
+		[tokyoCenter.lat + delta, tokyoCenter.lng + delta], // nord-est
 	);
 
 	const { lat, lng } = center;
@@ -80,6 +88,7 @@ export const Map: React.FC<MapProps> = ({
 				{pins.map((pin) => (
 					<Marker
 						key={pin.id}
+						icon={pinIcon}
 						position={[pin.lat, pin.lng]}
 						riseOnHover
 						eventHandlers={{

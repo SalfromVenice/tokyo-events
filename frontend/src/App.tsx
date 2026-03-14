@@ -12,6 +12,7 @@ import type { ApiStatusT, JventT } from './types';
 import { getMyPosition } from './helpers/geolocalization-helper';
 
 function App() {
+	const baseUrl = import.meta.env.VITE_API_URL;
 	const [apiStatus, setApiStatus] = useState<ApiStatusT>('IDLE');
 	const [events, setEvents] = useState<Record<string, JventT[]>>({
 		all: [],
@@ -34,7 +35,7 @@ function App() {
 		setApiStatus('PENDING');
 		try {
 			const response = await axios.get(
-				`http://127.0.0.1:3000/api/v1/events?lat=${lat}&lng=${lng}&radius=${distance}`,
+				`${baseUrl}/api/v1/events?lat=${lat}&lng=${lng}&radius=${distance}`,
 			);
 			const { data } = response;
 			const freeEv = data.filter(
@@ -63,7 +64,7 @@ function App() {
 		<>
 			<Slider distance={distance} setDistance={setDistance} />
 			<Map
-				jvents={eventsVisualized}
+				events={eventsVisualized}
 				center={location}
 				setCenter={setLocation}
 				distance={distance * 1000}
@@ -71,7 +72,7 @@ function App() {
 		</>,
 		<>
 			{eventsVisualized.map((jvent) => (
-				<EventCard key={jvent.id} jvent={jvent} />
+				<EventCard key={jvent.id} event={jvent} />
 			))}
 		</>,
 	];

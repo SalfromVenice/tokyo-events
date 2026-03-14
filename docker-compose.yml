@@ -1,0 +1,36 @@
+services:
+    db:
+        image: postgres:16
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: password
+            POSTGRES_DB: jvents_development
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        ports:
+            - '5432:5432'
+
+    backend:
+        build: ./backend
+        env_file:
+            - ./backend/.env
+        depends_on:
+            - db
+        environment:
+            DATABASE_URL: postgresql://postgres:password@db:5432/jvents_development
+            RAILS_ENV: development
+        ports:
+            - '3000:80'
+
+    frontend:
+        build:
+            context: ./frontend
+            args:
+                VITE_API_URL: http://localhost:3000
+        depends_on:
+            - backend
+        ports:
+            - '5173:80'
+
+volumes:
+    postgres_data:

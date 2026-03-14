@@ -5,14 +5,18 @@ import {
 	MapPinLineIcon,
 	ShareFatIcon,
 } from '@phosphor-icons/react';
-import { Suspense } from 'react';
+import { useState } from 'react';
 import type { JventT } from '../types';
 
 interface EventCardProps {
-	jvent: JventT;
+	event: JventT;
 }
 
-export const EventCard: React.FC<EventCardProps> = ({ jvent }) => {
+export const EventCard: React.FC<EventCardProps> = ({ event }) => {
+	const [imageStatus, setImageStatus] = useState<
+		'loaded' | 'error' | 'loading'
+	>('loading');
+
 	const {
 		address,
 		latitude,
@@ -24,7 +28,7 @@ export const EventCard: React.FC<EventCardProps> = ({ jvent }) => {
 		title,
 		url,
 		venue,
-	} = jvent;
+	} = event;
 
 	return (
 		<div
@@ -75,15 +79,21 @@ export const EventCard: React.FC<EventCardProps> = ({ jvent }) => {
 					{cost === 'FreeEntry' ? 'Free Entry' : cost}
 				</p>
 			</span>
-			<Suspense fallback={<div>loading...</div>}>
-				<img
-					style={{ objectFit: 'cover' }}
-					className='aspect-video sm:aspect-auto h-full order-1 sm:order-2 w-full'
-					loading='lazy'
-					src={image_url}
-					alt='jvent image'
-				/>
-			</Suspense>
+			{imageStatus === 'loading' && (
+				<div className='aspect-video sm:aspect-auto h-full order-1 sm:order-2 w-full bg-accent-dark/50 animate-pulse' />
+			)}
+			{imageStatus === 'error' && (
+				<div className='aspect-video sm:aspect-auto h-full order-1 sm:order-2 w-full bg-accent-dark/25' />
+			)}
+			<img
+				style={{ objectFit: 'cover' }}
+				className='aspect-video sm:aspect-auto h-full order-1 sm:order-2 w-full'
+				loading='lazy'
+				src={image_url}
+				alt='event image'
+				onLoad={() => setImageStatus('loaded')}
+				onError={() => setImageStatus('error')}
+			/>
 		</div>
 	);
 };

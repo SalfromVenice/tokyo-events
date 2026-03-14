@@ -38,12 +38,12 @@ export const TabSelector: React.FC<TabSelectorProps> = ({
 				}
 				children={<p>{visible}</p>}
 			/>
-			<div className='rounded-lg border border-white/50 grid grid-cols-2 w-fit overflow-hidden mx-auto'>
+			<div className='rounded-lg border border-accent-dark dark:border-white/50 grid grid-cols-2 w-fit overflow-hidden mx-auto'>
 				{tabs.map(({ icon, label }, index) => (
 					<span
 						key={index + label}
-						className={`px-4 py-2 first:border-r border-white/50 cursor-pointer
-                        ${isActive(index) ? 'bg-accent-dark/70' : 'text-white/70'}
+						className={`px-4 py-2 first:border-r border-accent-dark dark:border-white/50 cursor-pointer
+                        ${isActive(index) ? 'bg-accent-dark/70' : ' dark:text-white/70 hover:text-white'}
                         hover:bg-accent-dark`}
 						onClick={() => setTab(index)}
 						onMouseEnter={() => setVisible(label)}
